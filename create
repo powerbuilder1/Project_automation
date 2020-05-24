@@ -1,2 +1,5 @@
 #!/bin/bash
-echo "text lauf"
+cd
+cd Dokumente/Projekte/Project_automation
+python3 auto_project.py $1
+
