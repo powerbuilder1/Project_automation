@@ -5,6 +5,7 @@ import os
 import subprocess
 import pyautogui
 import time
+import math
 
 load_dotenv()
 project_path = os.getenv("PROJECT_PATH")
@@ -16,6 +17,55 @@ args = sys.argv
 # get new repo name form args
 repo_name = args[1]
 
+
+class Vector2D(object):
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __add__(self, other):
+        if isinstance(other, Vector2D):
+            x = self.x + other.x
+            y = self.y + other.y
+            res_vector = Vector2D(x, y)
+            return res_vector
+        elif isinstance(other, int) or isinstance(other, float):
+            self.x = self.x + other
+            self.y = self.y + other
+            return self
+        else:
+            print("add only with 'int', 'float' or 'vector2d'")
+
+    def __sub__(self, other):
+        if isinstance(other, Vector2D):
+            x = self.x - other.x
+            y = self.y - other.y
+            res_vector = Vector2D(x, y)
+            return res_vector
+        elif isinstance(other, int) or isinstance(other, float):
+            self.x = self.x - other
+            self.y = self.y - other
+            return self
+        else:
+            print("sub only with 'int', 'float' or 'vector2d'")
+
+    def __mul__(self, other):
+        if isinstance(other, Vector2D):
+            self.x = self.x * other.x
+            self.y = self.y * other.y
+            return self
+        elif isinstance(other, int) or isinstance(other, float):
+            self.x = self.x * other
+            self.y = self.y * other
+            return self
+        else:
+            print("mul only with 'int', 'float' or 'vector2d'")
+
+    def amount(self):
+        amount = math.sqrt(math.pow(self.x, 2) + math.pow(self.y, 2))
+        return amount
+
+
 def create_repo():
     # create Main Class obj
     g = Github(username, password)
@@ -26,6 +76,7 @@ def create_repo():
     # get clone url
     clone_url = new_repo.clone_url
     return clone_url
+
 
 def open_git_kraken():
     # bash command to start gitkraken
@@ -46,6 +97,7 @@ def open_git_kraken():
     all_letters.append("enter")
     # write command in new terminal
     pyautogui.typewrite(all_letters)
+
 
 def set_size_and_pos(width, height, x, y):
     # get window id
@@ -131,7 +183,6 @@ def create():
     # clone repo
     clone_repo_git_kraken(url)
 
-
     # # terminal with project path
     # pyautogui.hotkey('ctrl', 'shift', 'n')
     #
@@ -150,9 +201,20 @@ def create():
     # pyautogui.typewrite(all_letters)
 
 
-
-
 if __name__ == "__main__":
     # create()
 
-    set_size_and_pos(800, 800, 0, 0)
+    # set_size_and_pos(800, 800, 0, 0)
+
+    # command = "xdotool getwindowgeometry 83886120"
+    # proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    # (stdout, stderr) = proc.communicate()
+    # print(stdout)
+    # list = str(stdout, "utf8").split("  ")
+    # print(list)
+
+    a = Vector2D(5, 5)
+    b = Vector2D(1, 2)
+    c = a + b
+    print("X:", c.x, "Y:", c.y)
+    print("aomount", c.amount())
