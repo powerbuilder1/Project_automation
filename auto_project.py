@@ -98,6 +98,37 @@ def open_git_kraken():
     # write command in new terminal
     pyautogui.typewrite(all_letters)
 
+def get_window_geometry():
+    command = "xdotool getwindowgeometry 83886120"
+    proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    (stdout, stderr) = proc.communicate()
+    print(stdout)
+
+    list = str(stdout, "utf8").split("  ")
+    lenght = len(list)
+    for i in range(lenght):
+        list_part = list[i].split(" ")
+        for new_element in list_part:
+            list.append(new_element)
+    for i in range(lenght):
+        list.pop(0)
+
+    list.pop(4)
+    list.pop(4)
+
+    window_data = {}
+
+    for i in range(len(list)):
+        if list[i] == "Position:":
+            coord_list = list[i + 1].split(",")
+            pos = Vector2D(coord_list[0], coord_list[1])
+            window_data["position"] = pos
+        elif list[i] == 'Geometry:':
+            size_list = list[i + 1].split("x")
+            size = Vector2D(size_list[0], size_list[1][:-1])
+            window_data["size"] = size
+
+    return window_data
 
 def set_size_and_pos(width, height, x, y):
     # get window id
@@ -206,15 +237,8 @@ if __name__ == "__main__":
 
     # set_size_and_pos(800, 800, 0, 0)
 
-    # command = "xdotool getwindowgeometry 83886120"
-    # proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    # (stdout, stderr) = proc.communicate()
-    # print(stdout)
-    # list = str(stdout, "utf8").split("  ")
-    # print(list)
-
-    a = Vector2D(5, 5)
-    b = Vector2D(1, 2)
-    c = a + b
-    print("X:", c.x, "Y:", c.y)
-    print("aomount", c.amount())
+    # a = Vector2D(5, 5)
+    # b = Vector2D(1, 2)
+    # c = a + b
+    # print("X:", c.x, "Y:", c.y)
+    # print("aomount", c.amount())
