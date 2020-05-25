@@ -98,12 +98,14 @@ def open_git_kraken():
     # write command in new terminal
     pyautogui.typewrite(all_letters)
 
-def get_window_geometry():
-    command = "xdotool getwindowgeometry 83886120"
+def get_window_geometry(window_id):
+    # get window geometry (byte format)
+    command = f"xdotool getwindowgeometry {window_id}"
     proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     (stdout, stderr) = proc.communicate()
     print(stdout)
 
+    # format byte input into list of strings
     list = str(stdout, "utf8").split("  ")
     lenght = len(list)
     for i in range(lenght):
@@ -116,6 +118,7 @@ def get_window_geometry():
     list.pop(4)
     list.pop(4)
 
+    # dic with pos (vector with x, y) and size (vector with width, height)
     window_data = {}
 
     for i in range(len(list)):
