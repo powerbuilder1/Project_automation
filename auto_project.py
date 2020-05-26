@@ -11,6 +11,10 @@ load_dotenv()
 project_path = os.getenv("PROJECT_PATH")
 username = os.getenv("USERNAME")
 password = os.getenv("PASSWORD")
+window_height = os.getenv("WINDOW_HEIGHT")
+window_width = os.getenv("WINDOW_WIDTH")
+pos_x = os.getenv("POS_X")
+pos_y = os.getenv("POS_Y")
 
 # get args
 args = sys.argv
@@ -133,29 +137,40 @@ def get_window_geometry(window_id):
 
     return window_data
 
-def set_size_and_pos(width, height, x, y):
+def get_window_id(name):
     # get window id
-    command = "xdotool search --onlyvisible --name gitkraken"
+    command = f"xdotool search --onlyvisible --name {name}"
     proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     (stdout, stderr) = proc.communicate()
     # get list of all window_ids
     window_ids = str(stdout, "utf8").split("\n")[:-1]
+    return window_ids
+
+def set_size_and_pos(width, height, x, y, window_id):
     # set focus window
-    if len(window_ids) == 0:
-        print("[ERROR] No window found!")
-    command = f"xdotool windowsize {width} {height} {window_ids[0]}"
+    command = f"xdotool windowsize {width} {height} {window_id}"
     proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     (stdout, stderr) = proc.communicate()
-    command = f"xdotool windowmove {window_ids[0]} {x}, {y}"
+    command = f"xdotool windowmove {window_id} {x}, {y}"
     proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     (stdout, stderr) = proc.communicate()
 
 
 def clone_repo_git_kraken(clone_url):
+    # get window ids
+    window_ids = get_window_id("gitkraken")
+    window_id = window_ids[0]
+
+    # set window pos, size
+    set_size_and_pos(window_width, window_height, pos_x, pos_y, window_id)
+
+    # get window geometry
+    window_geometry = get_window_geometry(window_id)
+
     # hotkey for git clone
     pyautogui.hotkey('ctrl', 'n')
 
-    #
+    # mouse click in middle ###############################################################################
 
     # list of letters in command
     all_letters = []
