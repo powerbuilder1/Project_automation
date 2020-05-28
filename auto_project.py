@@ -128,11 +128,11 @@ def get_window_geometry(window_id):
     for i in range(len(list)):
         if list[i] == "Position:":
             coord_list = list[i + 1].split(",")
-            pos = Vector2D(coord_list[0], coord_list[1])
+            pos = Vector2D(float(coord_list[0]), float(coord_list[1]))
             window_data["position"] = pos
         elif list[i] == 'Geometry:':
             size_list = list[i + 1].split("x")
-            size = Vector2D(size_list[0], size_list[1][:-1])
+            size = Vector2D(float(size_list[0]), float(size_list[1][:-1]))
             window_data["size"] = size
 
     return window_data
@@ -170,7 +170,27 @@ def clone_repo_git_kraken(clone_url):
     # hotkey for git clone
     pyautogui.hotkey('ctrl', 'n')
 
-    # mouse click in middle ###############################################################################
+    # mouse click in middle
+    pos = window_geometry["position"]
+    size = window_geometry["size"]
+
+    # point a
+    a = pos
+
+    # point b
+    b = a + size
+
+    # vector ab
+    ab = b - a
+
+    # center of window
+    m = a + (ab * 0.5)
+
+    time.sleep(1)
+
+    pyautogui.click(m.x, m.y)
+
+    pyautogui.press('tab', presses=2)
 
     # list of letters in command
     all_letters = []
@@ -186,7 +206,7 @@ def clone_repo_git_kraken(clone_url):
 
     # tab to url
     pyautogui.press('tab', presses=2)
-
+    #
     all_letters = []
     print(clone_url)
     for letter in clone_url:
@@ -207,20 +227,6 @@ def clone_repo_git_kraken(clone_url):
     # submit
     pyautogui.press('enter')
 
-    # wait until popup
-    time.sleep(2)
-
-    # tab to open
-    pyautogui.press('tab')
-    pyautogui.press('tab')
-    pyautogui.press('tab')
-    pyautogui.press('tab')
-    pyautogui.press('tab')
-    pyautogui.press('tab')
-
-    # final submit
-    pyautogui.press('enter')
-
 
 def create():
     # create new repo
@@ -232,31 +238,6 @@ def create():
     # clone repo
     clone_repo_git_kraken(url)
 
-    # # terminal with project path
-    # pyautogui.hotkey('ctrl', 'shift', 'n')
-    #
-    # command = f"cd ~/Dokumente/Projekte/Project_automation/{repo_name}/"
-    # # list of letters in command
-    # all_letters = []
-    # for letter in command:
-    #     # avoid getting 7 instead of /
-    #     if letter == '/':
-    #         all_letters.append('divide')
-    #     else:
-    #         all_letters.append(letter)
-    # # add letter to submit command
-    # all_letters.append("enter")
-    # # write command in new terminal
-    # pyautogui.typewrite(all_letters)
-
 
 if __name__ == "__main__":
-    # create()
-
-    # set_size_and_pos(800, 800, 0, 0)
-
-    # a = Vector2D(5, 5)
-    # b = Vector2D(1, 2)
-    # c = a + b
-    # print("X:", c.x, "Y:", c.y)
-    # print("aomount", c.amount())
+    create()
