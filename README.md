@@ -7,6 +7,7 @@ Install:
 	chmod -x setup.sh
 	sudo ./setup.sh
 	touch .env
+	ADD /PATH/TO/Project_automation/ to PATH
 	Then open the .env file and store your username, password, window-height, window-width, and the position of the 		Window (X-pos, Y-pos). Use the provided format at the bottom of this README.
 
 Usage:
