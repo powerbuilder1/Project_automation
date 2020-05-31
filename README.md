@@ -5,6 +5,7 @@ Install:
 	git clone "https://github.com/powerbuilder1/Project_automation.git"
 	cd Project_automation
 	chmod -x setup.sh
+	chmod -x create
 	sudo ./setup.sh
 	ADD /PATH/TO/Project_automation/ to PATH
 	Then open the .env file and store your username, password, window-height, window-width, and the position of the 		Window (X-pos, Y-pos). Use the provided format at the bottom of this README.
